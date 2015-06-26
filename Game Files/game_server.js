@@ -26,21 +26,42 @@ var express = require('express');
 var app = express();
 app.use(express.static(__dirname));
 var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var player = require('./Player.js');
 var stage = require('./Stage.js');
-var players = [];
 var width = 500,
 	height = 500;
+var playerPositions = []
 var currentStage = new stage(new vector2(width/2, height/2), 200);
 
 p1 = new player(new vector2(100,100), 50);
-p2 = new player(new vector2(200,100), 50);
-
-players.push(p1);
-players.push(p2);
+p2 = new player(new vector2(300,100), 50);
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/game.html');
+});
+
+io.on('connection', function(socket){
+	console.log("a user connected");
+	socket.on('disconnect', function(){
+		console.log('a user disconnected');
+	});
+	setInterval(function(){
+		p1.setVel(new vector2(3,0));
+		
+		if(!p1.isIdle())
+			p1.update();
+		if(!p2.isIdle())
+			p2.update();
+			
+		if(p1.collides(p2)) 
+			collidePlayers(p1, p2);
+	
+		playerPositions = [];
+		playerPositions.push(p1.getPos());
+		playerPositions.push(p2.getPos());
+		socket.emit('update', playerPositions);
+	}, 1000 / 60);
 });
 
 http.listen(3000, function(){

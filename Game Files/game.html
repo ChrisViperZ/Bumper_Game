@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Assignment #3 -->
 <html>
   <head>
     <title>Game</title>
@@ -9,18 +8,24 @@
     </style>
   </head>
   
-  <body onload="main()">
+  <body>
     <canvas id="canvas" width=500 height=500>
       Canvas not supported in this browser.
     </canvas>
-    <script>
-      var canvas = document.getElementById("canvas");
-      var context = canvas.getContext("2d");
-    </script>
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	<script src="Keys.js"></script>
 	<script src="Player.js"></script>
+	<script src="Stage.js"></script>
+	<script>
+		var canvas = document.getElementById("canvas");
+		var context = canvas.getContext("2d");
+		var socket = io();
+		var keys = new Keys();
+		var p1 = new Player(new vector2(100,100), 50);
+		var p2 = new Player(new vector2(200,100), 50);
+		var stage = new Stage(new vector2(canvas.width/2, canvas.height/2), 200);
+    </script>
     <script src="game.js"></script>
   </body>
 </html>
