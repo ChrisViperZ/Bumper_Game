@@ -34,7 +34,7 @@ var width = 500,
 var playerPositions = []
 var currentStage = new stage(new vector2(width/2, height/2), 200);
 
-p1 = new player(new vector2(100,100), 50);
+p1 = new player(new vector2(100,135), 50);
 p2 = new player(new vector2(300,100), 50);
 
 app.get('/', function(req, res){
@@ -47,7 +47,8 @@ io.on('connection', function(socket){
 		console.log('a user disconnected');
 	});
 	setInterval(function(){
-		p1.setVel(new vector2(3,0));
+		p1.setVel(new vector2(p1.getVel().x + .5,0));
+//		p2.setVel(new vector2(p2.getVel().x - .25,0));
 		
 		if(!p1.isIdle())
 			p1.update();
